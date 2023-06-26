@@ -6,7 +6,6 @@ from shop.products.models import Addproduct, Brand, Category
 import os
 
 
-@app.route('/')
 @app.route('/admin')
 def admin():
     if 'email' not in session:

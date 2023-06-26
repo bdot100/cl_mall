@@ -5,6 +5,20 @@ from .forms import Addproducts
 import secrets, os
 
 
+@app.route('/')
+def home():
+    products = Addproduct.query.filter(Addproduct.stock > 0)
+    barnds = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+    return render_template('products/index.html', title='All products', products=products, barnds=barnds)
+
+
+@app.route('/brand/<int:id>', methods=['GET', 'POST'])
+def get_brand(id):
+    brand = Addproduct.query.filter_by(brand_id=id)
+    barnds = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+    return render_template('products/index.html', title='All products', brand=brand, barnds=barnds)
+
+
 @app.route('/addbrand', methods=['GET', 'POST'])
 def addbrand():
     if 'email' not in session:
