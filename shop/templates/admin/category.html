@@ -42,32 +42,25 @@
       </div>
     </nav>
   </div>
-
   <div class="container mt-5">
     <table class="table table-sm table-bordered table-striped table-hover">
       <thead>
         <th>Sr</th>
-        <th>Product</th>
-        <th>Price</th>
-        <th>Discount</th>
-        <th>Brand</th>
-        <th>Image</th>
+        <th>Name</th>
         <th>Edit</th>
         <th>Delete</th>
       </thead>
       <tbody>
-        {% for product in products %}
+        {% if categories %}
+        {% for category in categories %}
         <tr>
           <td>{{loop.index}}</td>
-          <td>{{product.name}}</td>
-          <td>{{product.price}}</td>
-          <td>{{product.discount}}</td>
-          <td>{{product.brand.name}}</td>
-          <td><img src="{{ url_for('static', filename='images/' + product.image_1) }}" width="50" height="40" alt=""></td>
-          <td><a href="{{ url_for('updateproduct', id=product.id) }}" class="btn btn-info btn-sm">Edit</a></td>
-          <td><a href="{{ url_for('updateproduct', id=product.id) }}" class="btn btn-danger btn-sm">Delete</a></td>
+          <td>{{category.name}}</td>
+          <td> <a href="" class="btn btn-sm btn-outline-info">Edit</a> </td>
+          <td> <a href="" class="btn btn-sm btn-outline-danger">Delete</a> </td>
         </tr>
         {% endfor %}
+        {% endif %}
       </tbody>
     </table>
   </div>
