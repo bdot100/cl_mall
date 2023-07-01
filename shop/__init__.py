@@ -4,6 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_uploads import IMAGES, UploadSet, configure_uploads
 import os
 from werkzeug.utils import secure_filename
+from flask_msearch import Search
 
 
 #basedir for our uploads
@@ -24,6 +25,8 @@ configure_uploads(app, photos)
 # initialize the app with the extension
 db.init_app(app)
 bcrypt = Bcrypt(app)
+search = Search()
+search.init_app(app)
 
 from shop.admin import routes
 from shop.products import routes
