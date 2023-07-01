@@ -5,18 +5,42 @@ from .forms import Addproducts
 import secrets, os
 
 
+def brands():
+    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+    return brands
+
+def categories():
+    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
+    return categories
+
+
 @app.route('/')
 def home():
-    products = Addproduct.query.filter(Addproduct.stock > 0)
-    barnds = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    return render_template('products/index.html', title='All products', products=products, barnds=barnds)
+    page = request.args.get('page', 1, type=int)
+    products = Addproduct.query.filter(Addproduct.stock > 0).order_by(Addproduct.id.desc()).paginate(page=page, per_page=4)
+    return render_template('products/index.html', title='All products', products=products, brands=brands(), categories=categories())
+
+
+@app.route('/product/<int:id>')
+def single_page(id):
+    product = Addproduct.query.get_or_404(id)
+    return render_template('products/single_page.html', title=product.name, product=product, brands=brands(), categories=categories())
 
 
 @app.route('/brand/<int:id>', methods=['GET', 'POST'])
 def get_brand(id):
-    brand = Addproduct.query.filter_by(brand_id=id)
-    barnds = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    return render_template('products/index.html', title='All products', brand=brand, barnds=barnds)
+    page = request.args.get('page', 1, type=int)
+    get_b = Brand.query.filter_by(id=id).first_or_404()
+    brand = Addproduct.query.filter_by(brand=get_b).paginate(page=page, per_page=4)
+    return render_template('products/index.html', title='All products', brand=brand, brands=brands(), categories=categories(), get_b=get_b)
+
+
+@app.route('/categories/<int:id>')
+def get_category(id):
+    page = request.args.get('page', 1, type=int)
+    get_cat = Category.query.filter_by(id=id).first_or_404()
+    get_prod_cat = Addproduct.query.filter_by(category=get_cat).paginate(page=page, per_page=4)
+    return render_template('products/index.html', title='All products', get_prod_cat=get_prod_cat, categories=categories(), brands=brands(), get_cat=get_cat)
 
 
 @app.route('/addbrand', methods=['GET', 'POST'])
