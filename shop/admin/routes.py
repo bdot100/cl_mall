@@ -4,6 +4,7 @@ from .forms import RegistrationForm, LoginForm
 from .models import User
 from shop.products.models import Addproduct, Brand, Category
 import os
+from flask_login import login_required, current_user, logout_user, login_user
 
 
 @app.route('/admin')
@@ -62,3 +63,9 @@ def login():
             flash('Wrong Password, Please try again', 'danger')
 
     return render_template('admin/login.html', form=form, title='Login Page')
+
+
+@app.route('/admin/logout')
+def admin_logout():
+    logout_user()
+    return redirect(url_for('login'))

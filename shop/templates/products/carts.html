@@ -41,6 +41,8 @@
                         <td><input type="number" name="quantity" min="1" max="10" value="{{product.quantity}}"></td>
                         {% if product.discount %}
                         <td>{{product.discount}}% &nbsp; is {{discount}}</td>
+                        {% else %}
+                        <td>{{product.discount}}% &nbsp; is {{discount}}</td>
                         {% endif %}
                         {% set subtotal = product.quantity|int * product.price|float %}
                         <td>{{"%0.2f"|format((subtotal|float) - discount|float)}}</td>
@@ -52,7 +54,7 @@
                 <table class="table table-sm">
                     <tr>
                         <td></td>
-                        <td><a href="/" class="btn btn-sm btn-success">Check Out</a></td>
+                        <td><a href="{{url_for('get_order')}}" class="btn btn-sm btn-success">Check Out</a></td>
                         <td width="35%"></td>
                         <td> <h5>Tax: ${{tax}}</h5> </td>
                         <td> <h5>Grand Total: ${{grandtotal}}</h5> </td>
